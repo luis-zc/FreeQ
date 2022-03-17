@@ -1,19 +1,17 @@
-from cgi import test
-from cgitb import text
-from socket import setdefaulttimeout
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
-from turtle import width
-from xml.dom import UserDataHandler
 import pyautogui
 import time
-import random
 import discord
 from dhooks import Webhook
-import data
-from importlib import reload
+import json
+import os
 
+if not os.path.exists("./data.json"):
+    data = {'webHookUrl': 'no webhook found', 'userID': 'no userID found'}
+    with open("data.json", "w") as f:
+        json.dump(data,f)
 
 
 # ----------------------------------------------------------------------
@@ -93,7 +91,7 @@ def initSettings(top):
     label1.grid(row=0,column=0,padx=5,pady=20)
 
 
-    textbox1=Entry(top,fg='white',bg="#141414",width=50, font=('Arial', 12),textvariable=data.hookUrl )
+    textbox1=Entry(top,fg='white',bg="#141414",width=50, font=('Arial', 12))
     textbox1.grid(row=0,column=1)
 
     label1 = Label(top, text='Webhook url:', fg="#11998e", bg="#141414", font=('Arial', 12))
@@ -102,7 +100,7 @@ def initSettings(top):
     label2 = Label(top, text='UserID:', fg="#11998e", bg="#141414", font=('Arial', 12))
     label2.grid(row=1,column=0,padx=5,pady=20)
 
-    textbox2=Entry(top,fg='white',bg="#141414",width=50, font=('Arial', 12), textvariable=data.userID)
+    textbox2=Entry(top,fg='white',bg="#141414",width=50, font=('Arial', 12))
     textbox2.grid(row=1,column=1)
 
     textbox = Text(top, width=70, height=10)
@@ -118,12 +116,19 @@ def initSettings(top):
     textbox.insert(INSERT, "v1.0")
 
     def saveSettings():
-        f = open("data.py", "w")
-        f.write('hookUrl = "' + textbox1.get() + '"\n')
-        f.write('userID = "' + textbox2.get() + '"\n')
-        f.close()
-        reload(data)
-        messagebox.showinfo(title="Success", message="userdata was successfully updated")
+        with open("data.json", "r") as f:
+            data = json.load(f)
+        if not textbox1.get() == "":
+            data["webHookUrl"] = textbox1.get()
+        if not textbox2.get() == "":
+            data["userID"] = textbox2.get()
+        with open("data.json", "w") as f:
+            json.dump(data, f)
+        
+        if textbox1.get() == "" and textbox2.get() == "":
+            messagebox.showerror(title="Error", message="Userdata was not overwritten.")
+        else:
+            messagebox.showinfo(title="Success", message="userdata was successfully updated")
 
     bttn(0,333,"S A V E", '#38ef7d', "#141414", saveSettings, top, 85,4)
     
@@ -189,18 +194,23 @@ def sendNotification(mode):
         case _:
             return
 
-    hook = Webhook(f"{data.hookUrl}")
+    with open("data.json", "r") as f:
+        data = json.load(f)
+    
 
-    e = discord.Embed(title="G A M E   F O U N D", description=f"Hey <@!{data.userID}>, you found a game!")
+    hook = Webhook(data["webHookUrl"])
+
+    e = discord.Embed(title="G A M E   F O U N D", description=f"Hey <@!"+ data["userID"] + ">, you found a game!")
     e.add_field(name="Gamemode:", value=f"{gamemode}")
     e.add_field(name="Queue Time:", value=f"{qTime}")
     e.set_thumbnail(url=f"{thumbURL}")    
-    hook.send(f"<@{data.userID}>")
+    hook.send(f"<@" + data["userID"] + ">")
     hook.send(embed = e)
 
 def test():
-    # Test function
-    sendNotification(0)
+    with open("data.json", "r") as f:
+        data = json.load(f)
+    print(data["userID"])
 
 def stopButton():
     # Stops Tracking and additionally resets title to default
@@ -285,7 +295,7 @@ def track(recVar):
 
 bttn(0,80,"S T A R T", '#12c2e9', "#141414", startTracking, root, 42, 4)
 bttn(0,140,"C A N C E L", '#f64f59', "#141414", stopButton, root, 42, 4)
-#bttn(0,50,"T E S T", '#c471ed', "#141414", test)
+#bttn(0,50,"T E S T", '#c471ed', "#141414", test, root, 42, 4)
 
 # ----------------------------------------------------------------------
 # Mainloop
