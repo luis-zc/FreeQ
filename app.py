@@ -13,6 +13,17 @@ if not os.path.exists("./data.json"):
     with open("data.json", "w") as f:
         json.dump(data,f)
 
+#-----------------------------------------------------------------------
+# pyinstaller def for resources
+#-----------------------------------------------------------------------
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 # ----------------------------------------------------------------------
 # Resource variables
@@ -25,7 +36,7 @@ thumbURL = "https://cdn.discordapp.com/attachments/953990432218566676/9539905748
 
 root = tk.Tk()
 root.title("Free-Q v1.0")
-root.iconbitmap('molangow.ico')
+root.iconbitmap(resource_path('molangow.ico'))
 #root.resizable(False, False) 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -53,7 +64,7 @@ top = None
 
 def initSettings(top):
     top.title("Free-Q v1.0 Settings")
-    top.iconbitmap('molangow.ico')
+    top.iconbitmap(resource_path('molangow.ico'))
     top.resizable(False, False)
     top.geometry(f'{int(screen_width/3)}x{int(screen_height/3)}')
     #top['bg'] = '#141414'
