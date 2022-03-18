@@ -27,7 +27,10 @@ root = tk.Tk()
 root.title("Free-Q v1.0")
 root.iconbitmap('molangow.ico')
 #root.resizable(False, False) 
-root.geometry('300x200')
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
+root.geometry(f'{int(screen_width/4)}x{int(screen_height/4)}')
 #root['bg'] = '#141414'
 
 # ----------------------------------------------------------------------
