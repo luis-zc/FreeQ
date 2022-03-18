@@ -55,7 +55,7 @@ def initSettings(top):
     top.title("Free-Q v1.0 Settings")
     top.iconbitmap('molangow.ico')
     top.resizable(False, False)
-    top.geometry(f'{int(screen_width/2.5)}x{int(screen_height/2.5)}')
+    top.geometry(f'{int(screen_width/3)}x{int(screen_height/3)}')
     #top['bg'] = '#141414'
     def closeSettings():
         global top  
@@ -78,14 +78,6 @@ def initSettings(top):
 
     textbox2=Entry(top,width=50, font=('Arial', 12))
     textbox2.grid(row=1,column=1)
-
-    textbox = Text(top, width=70, height=10)
-    textbox.place(relx=0.5, rely= 0.6, anchor = 'center')
-    textbox.insert(INSERT, "Insert discord webhook url and userID\n(Enable developer setting in discord to access userIDs by\nrightclicking on profiles).\n")
-    textbox.insert(INSERT, "The information is saved after closing the program.\n")
-    for i in range(5):
-        textbox.insert(INSERT,"\n")
-    textbox.insert(INSERT, "v1.0 - https://github.com/luis-zc/FreeQ")
 
     def saveSettings():
         with open("data.json", "r") as f:
