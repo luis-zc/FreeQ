@@ -26,44 +26,20 @@ thumbURL = "https://cdn.discordapp.com/attachments/953990432218566676/9539905748
 root = tk.Tk()
 root.title("Free-Q v1.0")
 root.iconbitmap('molangow.ico')
-root.resizable(False, False) 
+#root.resizable(False, False) 
 root.geometry('300x200')
-root['bg'] = '#141414'
+#root['bg'] = '#141414'
 
 # ----------------------------------------------------------------------
 # Generic Button def
 # ----------------------------------------------------------------------
 
-def bttn(x,y,text,bcolor,fcolor, cmd, window, w, h):
-    def on_enter(e):
-        mybutton['background']=bcolor
-        mybutton['foreground']=fcolor
-
-    def on_leave(e):
-        mybutton['background']=fcolor
-        mybutton['foreground']=bcolor
-
-    mybutton=Button(window,width=w,height = h, text = text,
-                        fg=bcolor,
-                        bg=fcolor,
-                        border=0,
-                        activeforeground=fcolor,
-                        activebackground=bcolor,
-                        command=cmd)
-    mybutton.bind("<Enter>", on_enter)
-    mybutton.bind("<Leave>", on_leave)
-
-    mybutton.place(x=x,y=y)
+def bttn(text,cmd, window):
+    mybutton=Button(window,text = text,command=cmd)
+    mybutton.pack()
 
 
 
-# ----------------------------------------------------------------------
-# Title
-# ----------------------------------------------------------------------
-title = Label(root, text="Free-Q v1.0", width = 100, height = 100, fg = "#c471ed", bg = "#141414")
-font1 = ('Calibri (Body)', 18, 'bold')
-title.config(font = font1)
-title.place(relx=0.5, rely= 0.2, anchor = 'center')
 
 # ----------------------------------------------------------------------
 # Settings
@@ -72,48 +48,41 @@ global top
 top = None
 
 
-
-
-
 def initSettings(top):
     top.title("Free-Q v1.0 Settings")
     top.iconbitmap('molangow.ico')
     top.resizable(False, False)
     top.geometry('600x400')
-    top['bg'] = '#141414'
+    #top['bg'] = '#141414'
     def closeSettings():
         global top  
         top.destroy()
         top = None
     top.protocol('WM_DELETE_WINDOW', closeSettings)
 
-    label1 = Label(top, text='Webhook url:', fg="#11998e", bg="#141414", font=('Arial', 12))
+    label1 = Label(top, text='Webhook url:', font=('Arial', 12))
     label1.grid(row=0,column=0,padx=5,pady=20)
 
 
-    textbox1=Entry(top,fg='white',bg="#141414",width=50, font=('Arial', 12))
+    textbox1=Entry(top,width=50, font=('Arial', 12))
     textbox1.grid(row=0,column=1)
 
-    label1 = Label(top, text='Webhook url:', fg="#11998e", bg="#141414", font=('Arial', 12))
+    label1 = Label(top, text='Webhook url:', font=('Arial', 12))
     label1.grid(row=0,column=0,padx=5,pady=20)
 
-    label2 = Label(top, text='UserID:', fg="#11998e", bg="#141414", font=('Arial', 12))
+    label2 = Label(top, text='UserID:', font=('Arial', 12))
     label2.grid(row=1,column=0,padx=5,pady=20)
 
-    textbox2=Entry(top,fg='white',bg="#141414",width=50, font=('Arial', 12))
+    textbox2=Entry(top,width=50, font=('Arial', 12))
     textbox2.grid(row=1,column=1)
 
     textbox = Text(top, width=70, height=10)
     textbox.place(relx=0.5, rely= 0.6, anchor = 'center')
-    textbox.insert(INSERT, "Insert discord webhook url and userID (Enable developer setting in discord to access userIDs by rightclicking on profiles).\n")
+    textbox.insert(INSERT, "Insert discord webhook url and userID\n(Enable developer setting in discord to access userIDs by\nrightclicking on profiles).\n")
     textbox.insert(INSERT, "The information is saved after closing the program.\n")
-    textbox.insert(INSERT, "\n")
-    textbox.insert(INSERT, "\n")
-    textbox.insert(INSERT, "\n")
-    textbox.insert(INSERT, "\n")
-    textbox.insert(INSERT, "\n")
-    textbox.insert(INSERT, "\n")
-    textbox.insert(INSERT, "v1.0")
+    for i in range(5):
+        textbox.insert(INSERT,"\n")
+    textbox.insert(INSERT, "v1.0 - https://github.com/luis-zc/FreeQ")
 
     def saveSettings():
         with open("data.json", "r") as f:
@@ -130,7 +99,8 @@ def initSettings(top):
         else:
             messagebox.showinfo(title="Success", message="userdata was successfully updated")
 
-    bttn(0,333,"S A V E", '#38ef7d', "#141414", saveSettings, top, 85,4)
+    saveSettingsButton = Button(top, text="S A V E", command = saveSettings)
+    saveSettingsButton.place(relx=0.5, rely= 0.9, anchor = 'center')
     
 
 
@@ -142,19 +112,7 @@ def openSettings():
     else:
         top.focus_set()
 
-settingsImage = PhotoImage(file='settings.gif')
-
-settingsButton = Button(root, image=settingsImage, bg="#141414", border = 0, command=openSettings)
-def on_enter(e):
-    settingsButton['background']="#f64f59"
-    settingsButton['foreground']="#141414"
-
-def on_leave(e):
-    settingsButton['background']="#141414"
-    settingsButton['foreground']="#f64f59"
-
-settingsButton.bind("<Enter>", on_enter)
-settingsButton.bind("<Leave>", on_leave)
+settingsButton = Button(root, text="Settings", command=openSettings)
 settingsButton.place(relx=0.02, rely= 0.02, anchor = 'nw')
 
 
@@ -255,7 +213,7 @@ def track(recVar):
     windowY = 70
     isInQueue = recVar
 
-    result = checkPixelColors(windowX,windowY,5)
+    result = checkPixelColors(windowX,windowY,10)
     #print(str(result))
     match result:
         case 0:
@@ -290,12 +248,21 @@ def track(recVar):
 
  
 # ----------------------------------------------------------------------
+# Title
+# ----------------------------------------------------------------------
+title = Label(root, text="Free-Q v1.0")
+font1 = ('Calibri (Body)', 18, 'bold')
+title.config(font = font1)
+#title.place(relx=0.5, rely= 0.2, anchor = 'center')
+title.pack()
+
+# ----------------------------------------------------------------------
 # Place buttons
 # ----------------------------------------------------------------------
 
-bttn(0,80,"S T A R T", '#12c2e9', "#141414", startTracking, root, 42, 4)
-bttn(0,140,"C A N C E L", '#f64f59', "#141414", stopButton, root, 42, 4)
-#bttn(0,50,"T E S T", '#c471ed', "#141414", test, root, 42, 4)
+bttn("S T A R T", startTracking, root)
+bttn("C A N C E L", stopButton, root)
+
 
 # ----------------------------------------------------------------------
 # Mainloop
