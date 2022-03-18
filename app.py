@@ -30,7 +30,7 @@ root.iconbitmap('molangow.ico')
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-root.geometry(f'{int(screen_width/4)}x{int(screen_height/4)}')
+root.geometry(f'{int(screen_width/6)}x{int(screen_height/6)}')
 #root['bg'] = '#141414'
 
 # ----------------------------------------------------------------------
@@ -55,7 +55,7 @@ def initSettings(top):
     top.title("Free-Q v1.0 Settings")
     top.iconbitmap('molangow.ico')
     top.resizable(False, False)
-    top.geometry('600x400')
+    top.geometry(f'{int(screen_width/2.5)}x{int(screen_height/2.5)}')
     #top['bg'] = '#141414'
     def closeSettings():
         global top  
